@@ -161,8 +161,15 @@ opts.Add(PathVariable(
 ))
 
 # Local dependency paths, adapt them to your setup
-godot_headers_path = "godot-cpp/godot-headers/"
-cpp_bindings_path = "godot-cpp/"
+if "GODOT_HEADERS" in os.environ:
+    godot_headers_path = os.environ["GODOT_HEADERS"]
+else:
+    godot_headers_path = "godot-cpp/godot-headers/"
+
+if "CPP_BINDINGS" in os.environ:
+    cpp_bindings_path = os.environ["CPP_BINDINGS"]
+else:
+    cpp_bindings_path = "godot-cpp/"
 
 # Updates the environment with the option variables.
 opts.Update(env)
@@ -373,9 +380,9 @@ elif env["platform"] == "javascript":
 env.Append(CPPPATH=[
     '.', 
     godot_headers_path, 
-    cpp_bindings_path + 'include/', 
-    cpp_bindings_path + 'include/core/', 
-    cpp_bindings_path + 'include/gen/'
+    os.path.join(cpp_bindings_path, 'include/'),
+    os.path.join(cpp_bindings_path, 'include/core/'),
+    os.path.join(cpp_bindings_path, 'include/gen/')
 ])
 
 arch_suffix = env['bits']
